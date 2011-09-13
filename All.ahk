@@ -1,3 +1,6 @@
+; Copyright (c) 2011, SATO Kentaro
+; BSD 2-Clause license
+
 #NoEnv
 #include %A_AppData%\AhkUnit\GuiRunner.ahk
 

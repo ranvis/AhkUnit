@@ -1,3 +1,6 @@
+; Copyright (c) 2011, SATO Kentaro
+; BSD 2-Clause license
+
 class AhkUnit {
 	SetDefaultRunner(runnerClass) {
 		global AhkUnit
@@ -49,8 +52,8 @@ class AhkUnit {
 	}
 	
 	class FrameworkCore {
-		var method_
-		var result_, message_, assertionCount_
+		; method_
+		; result_, message_, assertionCount_
 		
 		SetUp() {
 		}

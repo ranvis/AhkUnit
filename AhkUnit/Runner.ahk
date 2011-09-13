@@ -1,6 +1,9 @@
+; Copyright (c) 2011, SATO Kentaro
+; BSD 2-Clause license
+
 class AhkUnit_Runner {
-	var result, message, count
-	var test
+	; result, message, count
+	; test
 	
 	Default() {
 	}
@@ -10,11 +13,22 @@ class AhkUnit_Runner {
 		this.message := ""
 		this.count := { test: 0, assertion: 0, failure: 0, incomplete: 0 }
 		this.test := testInstance
-		testInstance.SetUp()
+		try {
+			testInstance.SetUp()
+		} catch e {
+			this._AddFailure("Exception thrown in SetUp")
+			return
+		}
 		for key in testInstance.base {
 			if (SubStr(key, -3) == "Test") {
-				testInstance.AuInit(key)
-				testInstance[key]()
+				this.count.test++
+				try {
+					testInstance.AuInit(key)
+					testInstance[key]()
+				} catch e {
+					this._AddFailure("Exception thrown in " . key)
+					continue
+				}
 				assertionCount := testInstance.AuGetAssertionCount()
 				this.count.assertion += assertionCount
 				if (assertionCount == 0) {
@@ -22,16 +36,23 @@ class AhkUnit_Runner {
 					this.count.incomplete++
 					this.message .= key . " has no assertions.`n`n"
 				} else if (!testInstance.AuGetResult()) {
-					this.result .= "F"
-					this.count.failure++
-					this.message .= testInstance.AuGetMessage() . "`n`n"
+					this._AddFailure(testInstance.AuGetMessage())
 				} else {
 					this.result .= "."
 				}
-				this.count.test++
 			}
 		}
-		testInstance.TearDown()
+		try {
+			testInstance.TearDown()
+		} catch e {
+			this._AddFailure("Exception thrown in TearDown")
+		}
+	}
+	
+	_AddFailure(message) {
+		this.result .= "F"
+		this.count.failure++
+		this.message .= message . "`n`n"
 	}
 	
 	GetCountString() {

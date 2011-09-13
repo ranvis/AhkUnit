@@ -1,3 +1,6 @@
+; Copyright (c) 2011, SATO Kentaro
+; BSD 2-Clause license
+
 class AhkUnit_Assert {
 	mixin(destObject, sourceClass) {
 		for property in sourceClass {
@@ -11,7 +14,7 @@ class AhkUnit_Assert {
 	}
 	
 	class Case_ {
-		var noCase
+		; noCase
 	
 		IgnoreCase() {
 			this.noCase := true
@@ -20,7 +23,7 @@ class AhkUnit_Assert {
 	}
 	
 	class Arg1_ extends AhkUnit_Assert.Base_ {
-		var actual
+		; actual
 		
 		__New(actual) {
 			this.actual := actual
@@ -28,7 +31,7 @@ class AhkUnit_Assert {
 	}
 	
 	class Arg2_ extends AhkUnit_Assert.Base_ {
-		var expected, actual
+		; expected, actual
 		
 		__New(expected, actual) {
 			this.expected := expected
@@ -37,7 +40,7 @@ class AhkUnit_Assert {
 	}
 	
 	class Message extends AhkUnit_Assert.Base_ {
-		var message
+		; message
 		
 		__New(message) {
 			this.message := message
@@ -84,7 +87,7 @@ class AhkUnit_Assert {
 	}
 	
 	class ObjectEqual extends AhkUnit_Assert.Arg2_ {
-		var message
+		; message
 		
 		Evaluate() {
 			if (!IsObject(this.expected) || !IsObject(this.actual)) {
@@ -120,7 +123,7 @@ class AhkUnit_Assert {
 	}
 	
 	class Not extends AhkUnit_Assert.Base_ {
-		var assertion, message
+		; assertion, message
 		
 		__New(assertion, message = "") {
 			this.assertion := assertion
@@ -140,7 +143,7 @@ class AhkUnit_Assert {
 	}
 	
 	class False extends AhkUnit_Assert.Arg1_ {
-		var isStrict
+		; isStrict
 		
 		Strict() {
 			this.isStrict := true

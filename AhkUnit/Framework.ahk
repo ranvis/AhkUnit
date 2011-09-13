@@ -1,5 +1,8 @@
+; Copyright (c) 2011, SATO Kentaro
+; BSD 2-Clause license
+
 class AhkUnit_Framework extends AhkUnit.FrameworkCore {
-	var filePath_
+	; filePath_
 	
 	SetFile(filePath) {
 		this.filePath_ := filePath

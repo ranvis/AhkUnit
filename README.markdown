@@ -1,7 +1,7 @@
 AhkUnit
 =======
 
-AhkUnit is a unit test framework for AutoHotkey_L.
+AhkUnit is a unit test framework for AutoHotkey_L 1.1.04.
 
 ## Installation
 
@@ -15,9 +15,30 @@ and make a junction of AhkUnit script folder.
 	cd AhkUnit
 	mklink /j %APPDATA%\AhkUnit AhkUnit
 
+## Usage
+
+    #NoEnv
+    #include %A_AppData%\AhkUnit\GuiRunner.ahk
+    
+    class YourClassTest extends AhkUnit_Framework {
+        ...your test cases...
+    }
+    
+    AhkUnit.AddTest(new YourClassTest())
+    AhkUnit.Run()
+
 ## Tutorial
 
 https://github.com/ranvis/AhkUnit/wiki/Tutorial
+
+## TODO
+
+Future assertion functions may throw an exception on failure,
+so that each  callers no longer need to pass its file name or
+line number.
+
+Test case functions should not catch exceptions.
+To expect an exception to be thrown, some special method will be prepared.
 
 ## License
 

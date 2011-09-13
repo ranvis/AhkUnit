@@ -1,3 +1,6 @@
+; Copyright (c) 2011, SATO Kentaro
+; BSD 2-Clause license
+
 #NoEnv
 #include %A_AppData%\AhkUnit\GuiRunner.ahk
 #include %A_ScriptDir%\AhkUnitTestSupplyment.ahk
@@ -28,12 +31,29 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 		this.AssertFalse(test.invalidTestCalled, "", A_LineNumber)
 	}
 	
-	TestResultTest() {
-		global AhkUnit, TestResultTestClass
-		test := new TestResultTestClass()
-		this.AssertObject(test, "", A_LineNumber)
+	_CheckRunnerResultCount(test, file, line) {
+		global AhkUnit
+		this.AssertObject(test, file, line)
 		runner := AhkUnit.RunTest(test, new AhkUnit.Runner())
-		this.AssertObjectEqual(test.expectCount, runner.GetCount(), "", A_LineNumber)
+		this.AssertObjectEqual(test.expectCount, runner.GetCount(), file, line)
+	}
+	
+	TestResultTest() {
+		global TestResultTestClass
+		test := new TestResultTestClass()
+		this._CheckRunnerResultCount(test, "", A_LineNumber)
+	}
+	
+	UncaughtExceptionTest() {
+		global UncaughtExceptionTestClass1
+		test := new UncaughtExceptionTestClass1()
+		this._CheckRunnerResultCount(test, "", A_LineNumber)
+		global UncaughtExceptionTestClass2
+		test := new UncaughtExceptionTestClass2()
+		this._CheckRunnerResultCount(test, "", A_LineNumber)
+		global UncaughtExceptionTestClass3
+		test := new UncaughtExceptionTestClass3()
+		this._CheckRunnerResultCount(test, "", A_LineNumber)
 	}
 	
 	ComparisonTest() {

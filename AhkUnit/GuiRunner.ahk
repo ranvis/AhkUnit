@@ -1,10 +1,14 @@
+; Copyright (c) 2011, SATO Kentaro
+; BSD 2-Clause license
+
 #include %A_AppData%\AhkUnit\AhkUnit.ahk
 
 class AhkUnit_GuiRunner extends AhkUnit_Runner {
-	var guiWindowIndex
-	var savedDefaultGuiWindow
+	; guiWindowIndex
+	; savedDefaultGuiWindow
 	
 	__New(guiWindowIndex = 0) {
+		global ahkUnitResultTree
 		base.__New()
 		if (!guiWindowIndex) {
 			global AhkUnit_GuiRunner
@@ -12,7 +16,7 @@ class AhkUnit_GuiRunner extends AhkUnit_Runner {
 		}
 		this.guiWindowIndex := guiWindowIndex
 		this.GuiBegin_()
-		Gui,Add,TreeView,ahkUnitResultTree R30 w600
+		Gui,Add,TreeView,vahkUnitResultTree R30 w600
 		Gui,Add,Button,Default W72 gAhkUnitGuiOk,&OK
 		Gui,Add,Button,W72 gAhkUnitGuiReload xp+80 yp+0,&Reload
 		Gui,+LabelAhkUnitGui
@@ -37,6 +41,7 @@ class AhkUnit_GuiRunner extends AhkUnit_Runner {
 	}
 	
 	Run(params*) {
+		global ahkUnitResultTree
 		base.Run(params*)
 		this.GuiBegin_()
 		GuiControl,-Redraw,ahkUnitResultTree
