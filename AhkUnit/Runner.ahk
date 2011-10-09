@@ -26,8 +26,14 @@ class AhkUnit_Runner {
 					testInstance.AuInit(key)
 					testInstance[key]()
 				} catch e {
-					this._AddFailure("Exception thrown in " . key)
-					continue
+					thrownClass := (e.__Class == "") ? "Exception" : e.__Class
+					expectedClass := testInstance[key . "_throws"]
+					if (expectedClass != "") {
+						testInstance.AssertEqual("throw " . expectedClass, "throw " . thrownClass, "", e.line, e.file)
+					} else {
+						this._AddFailure("Exception thrown in " . key)
+						continue
+					}
 				}
 				assertionCount := testInstance.AuGetAssertionCount()
 				this.count.assertion += assertionCount

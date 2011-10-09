@@ -50,6 +50,26 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 		this._CheckRunnerResultCount(test, "", A_LineNumber)
 	}
 	
+	ExpectedExceptionTest_throws := "ExpectedException"
+	ExpectedExceptionTest() {
+		throw new ExpectedException()
+	}
+	
+	ExpectedException2Test_throws := "Exception"
+	ExpectedException2Test() {
+		throw Exception("test")
+	}
+	
+	ExpectedException3Test_throws := "Exception"
+	ExpectedException3Test() {
+		throw 10 ; this won't provide you line number / file name
+	}
+	
+	UnexpectedExceptionTest() {
+		test := new UnexpectedExceptionTestClass()
+		this._CheckRunnerResultCount(test, "", A_LineNumber)
+	}
+	
 	ComparisonTest() {
 		this.Assert(new AhkUnit.Assert.Equal(0, 0), "", A_LineNumber)
 		this.Assert(new AhkUnit.Assert.Equal(true, 1), "", A_LineNumber)
@@ -94,6 +114,14 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 		this.Assert(new AhkUnit.Assert.Not(new AhkUnit.Assert.ObjectEqual(expected, actual)), "", A_LineNumber)
 		actual.Remove("c")
 		this.Assert(new AhkUnit.Assert.ObjectEqual(expected, actual), "", A_LineNumber)
+	}
+}
+
+class ExpectedException extends BaseException {
+	__New() {
+		backtrace := Exception("", -1)
+		this.file := backtrace.file
+		this.line := backtrace.line
 	}
 }
 

@@ -33,12 +33,27 @@ https://github.com/ranvis/AhkUnit/wiki/Tutorial
 
 ## TODO
 
-Future assertion functions may throw an exception on failure,
+Future assertion functions may create Exception object internally (without throwing,)
 so that each  callers no longer need to pass its file name or
 line number.
 
-Test case functions should not catch exceptions.
-To expect an exception to be thrown, some special method will be prepared.
+## Documentation
+
+TODO
+
+#### Testing exceptions
+
+Define an instance variable "YourTestName_throws" as "ExceptionName"
+
+	ExceptionTest_throws := "ThrowingException"
+	ExceptionTest() {
+		throw new ThrowingException()
+	}
+
+	ExceptionTest_throws := "Exception"
+	ExceptionTest() {
+		throw 3
+	}
 
 ## License
 

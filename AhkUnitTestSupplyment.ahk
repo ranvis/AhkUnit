@@ -102,3 +102,23 @@ class UncaughtExceptionTestClass3 extends AhkUnit_Framework {
 		throw 1
 	}
 }
+
+class UnexpectedExceptionTestClass extends AhkUnit_Framework {
+	expectCount := { test: 1, assertion: 1, failure: 1, incomplete: 0 }
+	
+	BadExceptionTest_throws := "CorrectException"
+	BadExceptionTest() {
+		throw new BadException()
+	}
+}
+
+class BaseException {
+	__New() {
+		backtrace := Exception("", -1)
+		this.file := backtrace.file
+		this.line := backtrace.line
+	}
+}
+
+class BadException extends BaseException {
+}
