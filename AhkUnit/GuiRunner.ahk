@@ -4,16 +4,15 @@
 #include %A_AppData%\AhkUnit\AhkUnit.ahk
 
 class AhkUnit_GuiRunner extends AhkUnit_Runner {
-	; guiWindowIndex
+	static nextGuiWindowIndex := 1
+	; guiWindowName
 	; savedDefaultGuiWindow
 	
-	__New(guiWindowIndex = 0) {
+	__New() {
 		global ahkUnitResultTree
 		base.__New()
-		if (!guiWindowIndex) {
-			guiWindowIndex := AhkUnit_GuiRunner.nextGuiWindowIndex++
-		}
-		this.guiWindowIndex := guiWindowIndex
+		guiWindowIndex := AhkUnit_GuiRunner.nextGuiWindowIndex++
+		this.guiWindowName := "AhkUnitGuiRunner" . guiWindowIndex
 		this.GuiBegin_()
 		Gui,Add,TreeView,vahkUnitResultTree R30 w600
 		Gui,Add,Button,Default W72 gAhkUnitGuiOk,&OK
@@ -29,8 +28,8 @@ class AhkUnit_GuiRunner extends AhkUnit_Runner {
 	
 	GuiBegin_() {
 		this.savedDefaultGuiWindow := A_Gui ? A_Gui : 1
-		guiWindowIndex := this.guiWindowIndex
-		Gui,%guiWindowIndex%:Default
+		guiWindowName := this.guiWindowName
+		Gui,%guiWindowName%:Default
 	}
 	
 	GuiEnd_() {
@@ -87,17 +86,16 @@ class AhkUnit_GuiRunner extends AhkUnit_Runner {
 	}
 	
 	ShowReport() {
-		guiWindowIndex := this.guiWindowIndex
-		Gui,%guiWindowIndex%:Show
+		guiWindowName := this.guiWindowName
+		Gui,%guiWindowName%:Show
 	}
 }
-
-AhkUnit_GuiRunner.nextGuiWindowIndex := 50
 
 AhkUnit.GuiRunner := AhkUnit_GuiRunner
 AhkUnit.SetDefaultRunner(AhkUnit.GuiRunner)
 
 if (false) {
+	; currently we cannot close each runner independently
 	AhkUnitGuiClose:
 		ExitApp
 		return
