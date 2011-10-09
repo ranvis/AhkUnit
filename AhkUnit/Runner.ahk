@@ -29,7 +29,9 @@ class AhkUnit_Runner {
 					thrownClass := (e.__Class == "") ? "Exception" : e.__Class
 					expectedClass := testInstance[key . "_throws"]
 					if (expectedClass != "") {
-						testInstance.AssertEqual("throw " . expectedClass, "throw " . thrownClass, "", e.line, e.file)
+						assertion := new AhkUnit.Assert.Equal("throw " . expectedClass, "throw " . thrownClass)
+						caller := IsObject(e) ? e : Object()
+						testInstance.Assert_(assertion, message, caller)
 					} else {
 						this._AddFailure("Exception thrown in " . key)
 						continue

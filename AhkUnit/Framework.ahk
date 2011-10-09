@@ -2,13 +2,11 @@
 ; BSD 2-Clause license
 
 class AhkUnit_Framework extends AhkUnit.FrameworkCore {
-	; filePath_
-	
+	; deprecated
 	SetFile(filePath) {
-		this.filePath_ := filePath
 	}
 	
-	Assert(assertion, message = "", line = 0, file = "") {
+	Assert_(assertion, message, caller) {
 		if (IsObject(assertion)) {
 			if (assertion.Evaluate()) {
 				this.AuSuccess()
@@ -17,14 +15,14 @@ class AhkUnit_Framework extends AhkUnit.FrameworkCore {
 		} else {
 			assertion := new AhkUnit.Assert.Message("Bad assertion object.")
 		}
+		caller := IsObject(caller) ? caller : Exception("", -caller - 1)
+		file := caller.file
+		line := caller.line
 		pos := ""
-		if (file == "" && this.filePath_ != "") {
-			file := this.filePath_
-		}
 		if (file != "") {
 			pos .= file
 		}
-		if (line != 0 && line != "") {
+		if (line != "") {
 			pos .= " (" . line . ")"
 		}
 		if (pos != "") {
@@ -43,43 +41,47 @@ class AhkUnit_Framework extends AhkUnit.FrameworkCore {
 		this.AuFailed(pos . message)
 	}
 	
-	AssertEqual(expected, actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.Equal(expected, actual), message, line, file)
+	Assert(assertion, message = "") {
+		this.Assert_(assertion, message, 2)
 	}
 	
-	AssertNotEqual(expected, actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.NotEqual(expected, actual), message, line, file)
+	AssertEqual(expected, actual, message = "") {
+		this.Assert(new AhkUnit.Assert.Equal(expected, actual), message)
 	}
 	
-	AssertEqualIgnoreCase(expected, actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.Equal(expected, actual).IgnoreCase(), message, line, file)
+	AssertNotEqual(expected, actual, message = "") {
+		this.Assert(new AhkUnit.Assert.NotEqual(expected, actual), message)
 	}
 	
-	AssertNotEqualIgnoreCase(expected, actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.NotEqual(expected, actual).IgnoreCase(), message, line, file)
+	AssertEqualIgnoreCase(expected, actual, message = "") {
+		this.Assert(new AhkUnit.Assert.Equal(expected, actual).IgnoreCase(), message)
 	}
 	
-	AssertObjectEqual(expected, actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.ObjectEqual(expected, actual), message, line, file)
+	AssertNotEqualIgnoreCase(expected, actual, message = "") {
+		this.Assert(new AhkUnit.Assert.NotEqual(expected, actual).IgnoreCase(), message)
 	}
 	
-	AssertTrue(actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.True(actual), message, line, file)
+	AssertObjectEqual(expected, actual, message = "") {
+		this.Assert(new AhkUnit.Assert.ObjectEqual(expected, actual), message)
 	}
 	
-	AssertFalse(actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.False(actual), message, line, file)
+	AssertTrue(actual, message = "") {
+		this.Assert(new AhkUnit.Assert.True(actual), message)
 	}
 	
-	AssertEmpty(actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.Empty(actual), message, line, file)
+	AssertFalse(actual, message = "") {
+		this.Assert(new AhkUnit.Assert.False(actual), message)
 	}
 	
-	AssertNotEmpty(actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.NotEmpty(actual), message, line, file)
+	AssertEmpty(actual, message = "") {
+		this.Assert(new AhkUnit.Assert.Empty(actual), message)
 	}
 	
-	AssertObject(actual, message = "", line = 0, file = "") {
-		this.Assert(new AhkUnit.Assert.Object(actual), message, line, file)
+	AssertNotEmpty(actual, message = "") {
+		this.Assert(new AhkUnit.Assert.NotEmpty(actual), message)
+	}
+	
+	AssertObject(actual, message = "") {
+		this.Assert(new AhkUnit.Assert.Object(actual), message)
 	}
 }

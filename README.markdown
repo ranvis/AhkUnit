@@ -31,15 +31,25 @@ and make a junction of AhkUnit script folder.
 
 https://github.com/ranvis/AhkUnit/wiki/Tutorial
 
-## TODO
-
-Future assertion functions may create Exception object internally (without throwing,)
-so that each  callers no longer need to pass its file name or
-line number.
-
 ## Documentation
 
 TODO
+
+#### Initializing test class instance
+
+	Setup() {
+		...your setup process...
+	}
+
+Setup() is called before starting tests.
+
+#### Cleaning up test class instance
+
+	TearDown() {
+		...your cleanup process...
+	}
+
+TearDown() is called after all tests.
 
 #### Testing exceptions
 

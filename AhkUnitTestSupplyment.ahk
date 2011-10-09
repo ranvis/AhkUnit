@@ -10,7 +10,6 @@ class MethodCallTestClass extends AhkUnit_Framework {
 	invalidTestCalled := false
 	
 	SetUp() {
-		this.SetFile(A_LineFile)
 		this.isSetUp := true
 	}
 	
@@ -39,10 +38,6 @@ class MethodCallTestClass extends AhkUnit_Framework {
 
 class TestResultTestClass extends AhkUnit_Framework {
 	expectCount := { test: 6, assertion: 4, failure: 2, incomplete: 3 }
-	
-	SetUp() {
-		this.SetFile(A_LineFile)
-	}
 	
 	EmptyTest() {
 	}
