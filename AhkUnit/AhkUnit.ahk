@@ -3,12 +3,10 @@
 
 class AhkUnit {
 	SetDefaultRunner(runnerClass) {
-		global AhkUnit
 		AhkUnit.defaultRunner := runnerClass
 	}
 	
 	RunTest(testInstance, runner = false) {
-		global AhkUnit
 		if (!runner) {
 			runner := new AhkUnit.defaultRunner()
 			runner.Default()
@@ -18,12 +16,10 @@ class AhkUnit {
 	}
 	
 	AddTest(testInstance) {
-		global AhkUnit
 		AhkUnit.testInstances.Insert(testInstance)
 	}
 	
 	Run(runner = false) {
-		global AhkUnit
 		if (AhkUnit.nesting != 0) {
 			return
 		}
@@ -37,12 +33,10 @@ class AhkUnit {
 	}
 	
 	Begin() {
-		global AhkUnit
 		AhkUnit.nesting++
 	}
 	
 	End(runner = false) {
-		global AhkUnit
 		if (AhkUnit.nesting == 0) {
 			MsgBox,AhkUnit.Begin() not called.
 			Exit

@@ -1,7 +1,7 @@
 AhkUnit
 =======
 
-AhkUnit is a unit test framework for AutoHotkey_L 1.1.04.
+AhkUnit is a unit test framework for AutoHotkey_L 1.1.05.
 
 ## Installation
 

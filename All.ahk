@@ -9,4 +9,7 @@ AhkUnit.Begin()
 #include %A_ScriptDir%\AhkUnitTestSupplyment.ahk
 AhkUnit.AddTest(new MethodCallTestClass())
 AhkUnit.AddTest(new TestResultTestClass())
+AhkUnit.AddTest(new UncaughtExceptionTestClass1())
+AhkUnit.AddTest(new UncaughtExceptionTestClass2())
+AhkUnit.AddTest(new UncaughtExceptionTestClass3())
 AhkUnit.End()

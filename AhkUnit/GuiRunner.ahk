@@ -11,7 +11,6 @@ class AhkUnit_GuiRunner extends AhkUnit_Runner {
 		global ahkUnitResultTree
 		base.__New()
 		if (!guiWindowIndex) {
-			global AhkUnit_GuiRunner
 			guiWindowIndex := AhkUnit_GuiRunner.nextGuiWindowIndex++
 		}
 		this.guiWindowIndex := guiWindowIndex

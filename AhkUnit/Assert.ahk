@@ -57,7 +57,6 @@ class AhkUnit_Assert {
 	
 	class Equal extends AhkUnit_Assert.Arg2_ {
 		__New(params*) {
-			global AhkUnit
 			base.__New(params*)
 			AhkUnit.Assert.mixin(this, AhkUnit.Assert.Case_)
 		}

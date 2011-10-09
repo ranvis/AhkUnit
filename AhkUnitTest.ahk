@@ -17,7 +17,6 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 	}
 	
 	TestMethodTest() {
-		global AhkUnit, MethodCallTestClass
 		test := new MethodCallTestClass()
 		this.AssertObject(test, "", A_LineNumber)
 		this.AssertFalse(test.isSetUp, "", A_LineNumber)
@@ -32,32 +31,26 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 	}
 	
 	_CheckRunnerResultCount(test, file, line) {
-		global AhkUnit
 		this.AssertObject(test, file, line)
 		runner := AhkUnit.RunTest(test, new AhkUnit.Runner())
 		this.AssertObjectEqual(test.expectCount, runner.GetCount(), file, line)
 	}
 	
 	TestResultTest() {
-		global TestResultTestClass
 		test := new TestResultTestClass()
 		this._CheckRunnerResultCount(test, "", A_LineNumber)
 	}
 	
 	UncaughtExceptionTest() {
-		global UncaughtExceptionTestClass1
 		test := new UncaughtExceptionTestClass1()
 		this._CheckRunnerResultCount(test, "", A_LineNumber)
-		global UncaughtExceptionTestClass2
 		test := new UncaughtExceptionTestClass2()
 		this._CheckRunnerResultCount(test, "", A_LineNumber)
-		global UncaughtExceptionTestClass3
 		test := new UncaughtExceptionTestClass3()
 		this._CheckRunnerResultCount(test, "", A_LineNumber)
 	}
 	
 	ComparisonTest() {
-		global AhkUnit
 		this.Assert(new AhkUnit.Assert.Equal(0, 0), "", A_LineNumber)
 		this.Assert(new AhkUnit.Assert.Equal(true, 1), "", A_LineNumber)
 		this.Assert(new AhkUnit.Assert.Equal(false, 0), "", A_LineNumber)
@@ -74,7 +67,6 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 	}
 	
 	BooleanTest() {
-		global AhkUnit
 		this.Assert(new AhkUnit.Assert.True(true), "", A_LineNumber)
 		this.Assert(new AhkUnit.Assert.True(1), "", A_LineNumber)
 		this.Assert(new AhkUnit.Assert.True(true).Strict(), "", A_LineNumber)
@@ -92,7 +84,6 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 	}
 	
 	ObjectComparisonTest() {
-		global AhkUnit
 		this.Assert(new AhkUnit.Assert.ObjectEqual([1,2,3], [1,2,3]), "", A_LineNumber)
 		this.Assert(new AhkUnit.Assert.Not(new AhkUnit.Assert.ObjectEqual([3,1,2], [1,2,3])), "", A_LineNumber)
 		this.Assert(new AhkUnit.Assert.ObjectEqual({a: 1, b: 2}, {a: 1, b: 2}), "", A_LineNumber)
