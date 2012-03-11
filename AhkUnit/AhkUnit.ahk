@@ -6,17 +6,21 @@ class AhkUnit {
 		AhkUnit.defaultRunner := runnerClass
 	}
 	
-	RunTest(testInstance, runner = false) {
+	RunTestClass(testClass, runner = false) {
 		if (!runner) {
 			runner := new AhkUnit.defaultRunner()
 			runner.Default()
 		}
-		runner.Run(testInstance)
+		runner.Run(testClass)
 		return runner
 	}
 	
-	AddTest(testInstance) {
-		AhkUnit.testInstances.Insert(testInstance)
+	AddTest(testInstance) { ; deprecated
+		AhkUnit.AddTestClass(testInstance.base)
+	}
+	
+	AddTestClass(testClass) {
+		AhkUnit.testClasses.Insert(testClass)
 	}
 	
 	Run(runner = false) {
@@ -27,8 +31,8 @@ class AhkUnit {
 			runner := new AhkUnit.defaultRunner()
 			runner.Default()
 		}
-		for key in AhkUnit.testInstances {
-			runner.Run(AhkUnit.testInstances[key])
+		for key in AhkUnit.testClasses {
+			runner.Run(AhkUnit.testClasses[key])
 		}
 	}
 	
@@ -48,6 +52,12 @@ class AhkUnit {
 	class FrameworkCore {
 		; method_
 		; result_, message_, assertionCount_
+		
+		SetUpBeforeClass() {
+		}
+		
+		TearDownAfterClass() {
+		}
 		
 		SetUp() {
 		}
@@ -94,7 +104,7 @@ class AhkUnit {
 }
 
 AhkUnit.nesting := 0
-AhkUnit.testInstances := []
+AhkUnit.testClasses := []
 
 #include %A_AppData%\AhkUnit\Assert.ahk
 #include %A_AppData%\AhkUnit\Framework.ahk

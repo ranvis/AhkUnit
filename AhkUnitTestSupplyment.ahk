@@ -4,40 +4,50 @@
 #include %A_AppData%\AhkUnit\AhkUnit.ahk
 
 class MethodCallTestClass extends AhkUnit_Framework {
-	isSetUp := false
-	isToneDown := false
-	testRemaining := 3
-	invalidTestCalled := false
+	static isSetUpBeforeClass := 0
+	static isToneDownBeforeClass := 0
+	static isSetUp := 0
+	static isToneDown := 0
+	static testRemaining := 3
+	static invalidTestCalled := false
+	
+	SetUpBeforeClass() {
+		MethodCallTestClass.isSetUpBeforeClass++
+	}
+	
+	TearDownAfterClass() {
+		MethodCallTestClass.isToneDownBeforeClass++
+	}
 	
 	SetUp() {
-		this.isSetUp := true
+		MethodCallTestClass.isSetUp++
 	}
 	
 	TearDown() {
-		this.isToneDown := true
+		MethodCallTestClass.isToneDown++
 	}
 	
 	ThisIsTest() {
-		this.AssertTrue(true)
-		this.testRemaining -= 1
+		MethodCallTestClass.AssertTrue(true)
+		MethodCallTestClass.testRemaining -= 1
 	}
 	
 	thisIsTestTooTest() {
-		this.AssertTrue(true)
-		this.testRemaining -= 2
+		MethodCallTestClass.AssertTrue(true)
+		MethodCallTestClass.testRemaining -= 2
 	}
 	
 	thisIsNotTEST() {
-		this.invalidTestCalled := true
+		MethodCallTestClass.invalidTestCalled := true
 	}
 	
 	thisIsNotTestEither() {
-		this.invalidTestCalled := true
+		MethodCallTestClass.invalidTestCalled := true
 	}
 }
 
 class TestResultTestClass extends AhkUnit_Framework {
-	expectCount := { test: 6, assertion: 4, failure: 2, incomplete: 3 }
+	static expectCount := { test: 6, assertion: 4, failure: 2, incomplete: 3 }
 	
 	EmptyTest() {
 	}
@@ -63,7 +73,33 @@ class TestResultTestClass extends AhkUnit_Framework {
 }
 
 class UncaughtExceptionTestClass1 extends AhkUnit_Framework {
-	expectCount := { test: 0, assertion: 0, failure: 1, incomplete: 0 }
+	static expectCount := { test: 0, assertion: 0, failure: 1, incomplete: 0 }
+	
+	SetUpBeforeClass() {
+		throw 1
+	}
+	
+	DummyTest() {
+		; never executed below
+		this.AssertTrue(true)
+	}
+}
+
+class UncaughtExceptionTestClass2 extends AhkUnit_Framework {
+	static expectCount := { test: 1, assertion: 0, failure: 1, incomplete: 0 }
+	
+	__New() {
+		throw 1
+	}
+	
+	DummyTest() {
+		; never executed below
+		this.AssertTrue(true)
+	}
+}
+
+class UncaughtExceptionTestClass3 extends AhkUnit_Framework {
+	static expectCount := { test: 1, assertion: 0, failure: 1, incomplete: 0 }
 	
 	SetUp() {
 		throw 1
@@ -75,8 +111,8 @@ class UncaughtExceptionTestClass1 extends AhkUnit_Framework {
 	}
 }
 
-class UncaughtExceptionTestClass2 extends AhkUnit_Framework {
-	expectCount := { test: 1, assertion: 0, failure: 1, incomplete: 0 }
+class UncaughtExceptionTestClass4 extends AhkUnit_Framework {
+	static expectCount := { test: 1, assertion: 0, failure: 1, incomplete: 0 }
 	
 	ExceptionTest() {
 		this.AssertTrue(true)
@@ -86,8 +122,8 @@ class UncaughtExceptionTestClass2 extends AhkUnit_Framework {
 	}
 }
 
-class UncaughtExceptionTestClass3 extends AhkUnit_Framework {
-	expectCount := { test: 1, assertion: 1, failure: 1, incomplete: 0 }
+class UncaughtExceptionTestClass5 extends AhkUnit_Framework {
+	static expectCount := { test: 1, assertion: 1, failure: 1, incomplete: 0 }
 	
 	DummyTest() {
 		this.AssertTrue(true)
@@ -98,10 +134,22 @@ class UncaughtExceptionTestClass3 extends AhkUnit_Framework {
 	}
 }
 
-class UnexpectedExceptionTestClass extends AhkUnit_Framework {
-	expectCount := { test: 1, assertion: 1, failure: 1, incomplete: 0 }
+class UncaughtExceptionTestClass6 extends AhkUnit_Framework {
+	static expectCount := { test: 1, assertion: 1, failure: 1, incomplete: 0 }
 	
-	BadExceptionTest_throws := "CorrectException"
+	DummyTest() {
+		this.AssertTrue(true)
+	}
+	
+	TearDownAfterClass() {
+		throw 1
+	}
+}
+
+class UnexpectedExceptionTestClass extends AhkUnit_Framework {
+	static expectCount := { test: 1, assertion: 1, failure: 1, incomplete: 0 }
+	
+	static BadExceptionTest_throws := "CorrectException"
 	BadExceptionTest() {
 		throw new BadException()
 	}

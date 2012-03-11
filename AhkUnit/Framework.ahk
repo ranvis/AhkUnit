@@ -2,8 +2,21 @@
 ; BSD 2-Clause license
 
 class AhkUnit_Framework extends AhkUnit.FrameworkCore {
+	__New() {
+		base.__New()
+		this.callstackDepth := 0
+	}
+	
 	; deprecated
 	SetFile(filePath) {
+	}
+	
+	ReportParent_(increase) {
+		if (increase) {
+			this.callstackDepth++
+		} else {
+			this.callstackDepth--
+		}
 	}
 	
 	Assert_(assertion, message, caller) {
@@ -42,7 +55,7 @@ class AhkUnit_Framework extends AhkUnit.FrameworkCore {
 	}
 	
 	Assert(assertion, message = "") {
-		this.Assert_(assertion, message, 2)
+		this.Assert_(assertion, message, 2 + this.callstackDepth)
 	}
 	
 	AssertEqual(expected, actual, message = "") {

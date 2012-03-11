@@ -8,52 +8,81 @@ class AhkUnit_Runner {
 	Default() {
 	}
 	
-	Run(testInstance) {
+	Run(testClass) {
 		this.result := ""
 		this.message := ""
 		this.count := { test: 0, assertion: 0, failure: 0, incomplete: 0 }
-		this.test := testInstance
+		this.testClass := testClass
 		try {
-			testInstance.SetUp()
+			testClass.SetUpBeforeClass()
 		} catch e {
-			this._AddFailure("Exception thrown in SetUp")
+			this._AddFailure("Exception thrown in SetUpBeforeClass")
 			return
 		}
-		for key in testInstance.base {
+		testInstances := Object()
+		for key in testClass {
 			if (SubStr(key, -3) == "Test") {
 				this.count.test++
 				try {
-					testInstance.AuInit(key)
-					testInstance[key]()
-				} catch e {
-					thrownClass := (e.__Class == "") ? "Exception" : e.__Class
-					expectedClass := testInstance[key . "_throws"]
-					if (expectedClass != "") {
-						assertion := new AhkUnit.Assert.Equal("throw " . expectedClass, "throw " . thrownClass)
-						caller := IsObject(e) ? e : Object()
-						testInstance.Assert_(assertion, message, caller)
-					} else {
-						this._AddFailure("Exception thrown in " . key)
-						continue
-					}
+					testInstance := { base: testClass }
+					testInstance.__New()
+					; cannot do %test_class_name% without global %test_class_name%.
+					; also, directly calling __New() doesn't initialize instance variables.
 				}
-				assertionCount := testInstance.AuGetAssertionCount()
-				this.count.assertion += assertionCount
-				if (assertionCount == 0) {
-					this.result .= "I"
-					this.count.incomplete++
-					this.message .= key . " has no assertions.`n`n"
-				} else if (!testInstance.AuGetResult()) {
-					this._AddFailure(testInstance.AuGetMessage())
+				catch {
+					this._AddFailure("Exception thrown in constructor")
+					continue
+				}
+				try {
+					testInstance.SetUp()
+				}
+				catch {
+					this._AddFailure("Exception thrown in SetUp")
+					continue
+				}
+				testInstances[key] := testInstance
+			}
+		}
+		for key, testInstance in testInstances {
+			try {
+				testInstance.AuInit(key)
+				testInstance[key]()
+			} catch e {
+				thrownClass := (e.__Class == "") ? "Exception" : e.__Class
+				expectedClass := testInstance[key . "_throws"]
+				if (expectedClass != "") {
+					assertion := new AhkUnit.Assert.Equal("throw " . expectedClass, "throw " . thrownClass)
+					caller := IsObject(e) ? e : Object()
+					testInstance.Assert_(assertion, "", caller)
 				} else {
-					this.result .= "."
+					this._AddFailure("Exception thrown in " . key)
+					continue
 				}
+			}
+			assertionCount := testInstance.AuGetAssertionCount()
+			this.count.assertion += assertionCount
+			if (assertionCount == 0) {
+				this.result .= "I"
+				this.count.incomplete++
+				this.message .= key . " has no assertions.`n`n"
+			} else if (!testInstance.AuGetResult()) {
+				this._AddFailure(testInstance.AuGetMessage())
+			} else {
+				this.result .= "."
+			}
+		}
+		for key, testInstance in testInstances {
+			try {
+				testInstance.TearDown()
+			}
+			catch {
+				this._AddFailure("Exception thrown in TearDown")
 			}
 		}
 		try {
-			testInstance.TearDown()
+			testClass.TearDownAfterClass()
 		} catch e {
-			this._AddFailure("Exception thrown in TearDown")
+			this._AddFailure("Exception thrown in TearDownAfterClass")
 		}
 	}
 	

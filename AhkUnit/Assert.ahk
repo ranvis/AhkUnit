@@ -26,6 +26,7 @@ class AhkUnit_Assert {
 		; actual
 		
 		__New(actual) {
+			base.__New()
 			this.actual := actual
 		}
 	}
@@ -34,6 +35,7 @@ class AhkUnit_Assert {
 		; expected, actual
 		
 		__New(expected, actual) {
+			base.__New()
 			this.expected := expected
 			this.actual := actual
 		}
@@ -43,6 +45,7 @@ class AhkUnit_Assert {
 		; message
 		
 		__New(message) {
+			base.__New()
 			this.message := message
 		}
 		
@@ -96,24 +99,31 @@ class AhkUnit_Assert {
 			expected := this.expected._NewEnum()
 			actual := this.actual._NewEnum()
 			; easy comparison
+			messageExpected := ""
+			messageActual := ""
 			while expected[expectedKey, expectedValue] {
 				actual[actualKey, actualValue]
 				if (expectedKey != actualKey) {
-					this.message := "Key expected: " . expectedKey
-					this.message .= "Key actual  : " . actualKey
-					return false
+					messageExpected .= ", [" . expectedKey . "]"
+					messageActual .= ", [" . actualKey . "]"
+					break
 				}
 				if (!(expectedValue == actualValue)) {
-					this.message := "Expected: [" . expectedKey . "] = " . expectedValue . "`n"
-					this.message .= "Actual  : [" . actualKey . "] = " . actualValue
-					return false
+					messageExpected .= ", [" . expectedKey . "] = " . expectedValue
+					messageActual .= ", [" . actualKey . "] = " . actualValue
 				}
 			}
-			if (actual[actualKey, actualValue]) {
-				this.message := "Excess key: " . actualKey
-				return false
+			this.message := ""
+			if (messageExpected != "") {
+				this.message := SubStr(messageExpected, 3) . "`n" . SubStr(messageActual, 3)
 			}
-			return true
+			if (actual[actualKey, actualValue]) {
+				if (this.message != "") {
+					this.message .= "`n"
+				}
+				this.message .= "Excess key: " . actualKey
+			}
+			return this.message == ""
 		}
 		
 		GetMesssage() {
@@ -125,6 +135,7 @@ class AhkUnit_Assert {
 		; assertion, message
 		
 		__New(assertion, message = "") {
+			base.__New()
 			this.assertion := assertion
 			this.message := message
 		}

@@ -1,5 +1,5 @@
-AhkUnit
-=======
+AhkUnit 1.1
+===========
 
 AhkUnit is a unit test framework for AutoHotkey_L 1.1.05.
 
@@ -17,53 +17,21 @@ and make a junction of AhkUnit script folder.
 
 ## Usage
 
-    #NoEnv
-    #include %A_AppData%\AhkUnit\GuiRunner.ahk
-    
-    class YourClassTest extends AhkUnit_Framework {
-        ...your test cases...
-    }
-    
-    AhkUnit.AddTest(new YourClassTest())
-    AhkUnit.Run()
-
-## Tutorial
-
-https://github.com/ranvis/AhkUnit/wiki/Tutorial
-
-## Documentation
-
-TODO
-
-#### Initializing test class instance
-
-	Setup() {
-		...your setup process...
+	#NoEnv
+	#include %A_AppData%\AhkUnit\GuiRunner.ahk
+	
+	class YourClassTest extends AhkUnit_Framework {
+		YourTest() {
+			...assertions...
+		}
 	}
+	
+	AhkUnit.AddClass(YourClassTest)
+	AhkUnit.Run()
 
-Setup() is called before starting tests.
+## Tutorial etc.
 
-#### Cleaning up test class instance
-
-	TearDown() {
-		...your cleanup process...
-	}
-
-TearDown() is called after all tests.
-
-#### Testing exceptions
-
-Define an instance variable "YourTestName_throws" as "ExceptionName"
-
-	ExceptionTest_throws := "ThrowingException"
-	ExceptionTest() {
-		throw new ThrowingException()
-	}
-
-	ExceptionTest_throws := "Exception"
-	ExceptionTest() {
-		throw 3
-	}
+https://github.com/ranvis/AhkUnit/wiki/
 
 ## License
 

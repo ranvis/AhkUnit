@@ -44,7 +44,7 @@ class AhkUnit_GuiRunner extends AhkUnit_Runner {
 		this.GuiBegin_()
 		GuiControl,-Redraw,ahkUnitResultTree
 		count := this.GetCount()
-		statusString := this.test.__Class
+		statusString := this.testClass.__Class
 		statusOptions := ""
 		if (count.failure) {
 			statusOptions := "Expand Bold"

@@ -2,7 +2,9 @@
 ; BSD 2-Clause license
 
 #NoEnv
+#Warn All
 #include %A_AppData%\AhkUnit\GuiRunner.ahk
+#include %A_AppData%\AhkUnit\ParentReporter.ahk
 #include %A_ScriptDir%\AhkUnitTestSupplyment.ahk
 
 class AhkUnitFrameworkTest extends AhkUnit_Framework {
@@ -10,56 +12,67 @@ class AhkUnitFrameworkTest extends AhkUnit_Framework {
 	}
 	
 	TestMethodTest() {
-		test := new MethodCallTestClass()
+		test := MethodCallTestClass
 		this.AssertObject(test, "")
-		this.AssertFalse(test.isSetUp, "")
-		this.AssertFalse(test.isToneDown, "")
+		this.AssertEqual(0, test.isSetUpBeforeClass, "")
+		this.AssertEqual(0, test.isToneDownBeforeClass, "")
+		this.AssertEqual(0, test.isSetUp, "")
+		this.AssertEqual(0, test.isToneDown, "")
 		this.AssertNotEqual(0, test.testRemaining, "")
 		this.AssertFalse(test.invalidTestCalled, "")
-		runner := AhkUnit.RunTest(test, new AhkUnit.Runner())
-		this.AssertTrue(test.isSetUp, "")
-		this.AssertTrue(test.isToneDown, "")
+		runner := AhkUnit.RunTestClass(test, new AhkUnit.Runner())
+		this.AssertEqual(1, test.isSetUpBeforeClass, "")
+		this.AssertEqual(1, test.isToneDownBeforeClass, "")
+		this.AssertEqual(2, test.isSetUp, "")
+		this.AssertEqual(2, test.isToneDown, "")
 		this.AssertEqual(0, test.testRemaining, "")
 		this.AssertFalse(test.invalidTestCalled, "")
 	}
 	
 	_CheckRunnerResultCount(test) {
+		cs := new AhkUnit.ParentReporter(this)
 		this.AssertObject(test)
-		runner := AhkUnit.RunTest(test, new AhkUnit.Runner())
+		runner := AhkUnit.RunTestClass(test, new AhkUnit.Runner())
 		this.AssertObjectEqual(test.expectCount, runner.GetCount())
 	}
 	
 	TestResultTest() {
-		test := new TestResultTestClass()
+		test := TestResultTestClass
 		this._CheckRunnerResultCount(test, "")
 	}
 	
 	UncaughtExceptionTest() {
-		test := new UncaughtExceptionTestClass1()
+		test := UncaughtExceptionTestClass1
 		this._CheckRunnerResultCount(test, "")
-		test := new UncaughtExceptionTestClass2()
+		test := UncaughtExceptionTestClass2
 		this._CheckRunnerResultCount(test, "")
-		test := new UncaughtExceptionTestClass3()
+		test := UncaughtExceptionTestClass3
+		this._CheckRunnerResultCount(test, "")
+		test := UncaughtExceptionTestClass4
+		this._CheckRunnerResultCount(test, "")
+		test := UncaughtExceptionTestClass5
+		this._CheckRunnerResultCount(test, "")
+		test := UncaughtExceptionTestClass6
 		this._CheckRunnerResultCount(test, "")
 	}
 	
-	ExpectedExceptionTest_throws := "ExpectedException"
+	static ExpectedExceptionTest_throws := "ExpectedException"
 	ExpectedExceptionTest() {
 		throw new ExpectedException()
 	}
 	
-	ExpectedException2Test_throws := "Exception"
+	static ExpectedException2Test_throws := "Exception"
 	ExpectedException2Test() {
 		throw Exception("test")
 	}
 	
-	ExpectedException3Test_throws := "Exception"
+	static ExpectedException3Test_throws := "Exception"
 	ExpectedException3Test() {
 		throw 10 ; this won't provide you line number / file name
 	}
 	
 	UnexpectedExceptionTest() {
-		test := new UnexpectedExceptionTestClass()
+		test := UnexpectedExceptionTestClass
 		this._CheckRunnerResultCount(test, "")
 	}
 	
@@ -118,5 +131,5 @@ class ExpectedException extends BaseException {
 	}
 }
 
-AhkUnit.AddTest(new AhkUnitFrameworkTest())
+AhkUnit.AddTestClass(AhkUnitFrameworkTest)
 AhkUnit.Run()
